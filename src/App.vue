@@ -1,30 +1,51 @@
 <template>
 	<div class="mdl-color--blue-50">
-		<header class="demo-header mdl-layout__header mdl-layout__header--transparent mdl-color-text--grey-600">
-	        <div class="mdl-layout__header-row">
-	          <!-- <span class="mdl-layout-title">Home</span> -->
-	          <div class="mdl-layout-spacer"></div>
-	          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-	            <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
-	              <i class="material-icons">search</i>
-	            </label>
-	            <div class="mdl-textfield__expandable-holder">
-	              <input class="mdl-textfield__input" type="text" id="search" placeholder="lovely place ugly city">
-	            </div>
-	          </div>
-	        </div>
-    	</header>
-		<main class="mdl-layout__content main-view">
-			<div class="mdl-grid outer-grid border">
-				<div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset border">CS 6</div>
-				
-   			</div>
-		</main>
+		<router-view></router-view>
 	</div>
 </template>
 
 <script>
+	import Firebase from 'firebase';
+
+	// import toastr from 'toastr';
+		let config = {
+		    apiKey: "AIzaSyCIF4o3M1OKuFGVKy4k5s2Gf3aMRz7s7lE",
+		    authDomain: "lovelyfaceuglycity.firebaseapp.com",
+		    databaseURL: "https://lovelyfaceuglycity.firebaseio.com",
+		    projectId: "lovelyfaceuglycity",
+		    storageBucket: "lovelyfaceuglycity.appspot.com",
+		    messagingSenderId: "997628556408"
+		 };
+		  
+		let app = Firebase.initializeApp(config);
+		let db = app.database();
+		let booksRef = db.ref('books');
 export default {
+	firebase: {
+		books: booksRef
+	},
+	data () {
+		return {
+			newBook :{
+				title: '',
+		        author: '',
+		        url: 'http://'
+			}
+		}
+	},
+	methods: {
+      addBook: function () {
+        booksRef.push(this.newBook);
+        this.newBook.title = '';
+        this.newBook.author = '';
+        this.newBook.url = 'http://';
+      },
+      removeBook: function (book) {
+        booksRef.child(book['.key']).remove()
+        toastr.success('Book removed successfully')
+      }
+    }
+
   }
 </script>
 
