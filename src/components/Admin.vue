@@ -27,54 +27,16 @@
 	</div>
 </template>
 <script>
-	import Firebase from 'firebase';
+
 
 	// import toastr from 'toastr';
-		let config = {
-		    apiKey: "AIzaSyCIF4o3M1OKuFGVKy4k5s2Gf3aMRz7s7lE",
-		    authDomain: "lovelyfaceuglycity.firebaseapp.com",
-		    databaseURL: "https://lovelyfaceuglycity.firebaseio.com",
-		    projectId: "lovelyfaceuglycity",
-		    storageBucket: "lovelyfaceuglycity.appspot.com",
-		    messagingSenderId: "997628556408"
-		 };
-		  
-		let app = Firebase.initializeApp(config);
-		let db = app.database();
-		// let booksRef = db.ref('books');
-		let auth = firebase.auth();
+
 	export default {
 		data () {
 			return {
 
 			}
-		},
-		firebase: {
-		    users: usersRef
-		},
-		computed: {
-			validation: function () {
-			  return {
-			    name: !!this.newUser.name.trim(),
-			    email: emailRE.test(this.newUser.email)
-			  }
-			},
-			isValid: function () {
-			  var validation = this.validation
-			  return Object.keys(validation).every(function (key) {
-			    return validation[key]
-			  })
-			}
-		},
-		methods: {
-			signIn(email,password){
-				auth.signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
-					console.log("email:", email);
-					console.log("password:", password);
-				})
-			}
-		}
-	}
+		}	}
 </script>
 
 <style lang="scss" scoped>

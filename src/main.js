@@ -3,6 +3,9 @@ import App from './App.vue';
 import VueRouter from 'vue-router';
 import VueMaterial from 'vue-material';
 import VueFire from 'vuefire';
+import Vuex from 'vuex';
+
+Vue.use(Vuex)
 
 import { routes } from './routes';
 
