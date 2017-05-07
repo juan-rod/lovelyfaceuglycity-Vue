@@ -16,7 +16,7 @@
     	</header>
 		<main class="mdl-layout__content main-view">
 			<div class="mdl-grid outer-grid border">
-				<div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset border">CS 6</div>
+				<div class="mdl-cell mdl-cell--6-col mdl-cell--3-offset border">Coming Soon</div>
 				
    			</div>
 		</main>

@@ -58,6 +58,7 @@
 <script>
 import {db} from '../firebase';
 import TravelCard from './TravelCard.vue';
+import { mapActions } from 'vuex';
 
 var travelRef = db.ref('travel');
 export default {
@@ -79,22 +80,21 @@ export default {
     travels: travelRef.limitToLast(25)
   },
   methods: {
+  	...mapActions([
+        'createTravelCard'
+      ]),
     removeTravel: function (key) {
       travelRef.child(key).remove();
     },
-    addTravel: function (data) {
-        travelRef.push({
-          title: this.travelCard.pTitle,
-          description: this.travelCard.pDesc,
-          location: this.travelCard.pLocation,
-          img: this.travelCard.pImg
-        });
-        // reset input box
-        this.travelCard.pTitle= "";
-        this.travelCard.pDesc= "";
-        this.travelCard.pLocation= "";
-        this.travelCard.pImg= "";
-      
+    addTravel: function () {
+    	var vm = this;
+	    this.createTravelCard(this.travelCard)
+      		.then(function(){
+		        vm.travelCard.pTitle= "";
+		        vm.travelCard.pDesc= "";
+		        vm.travelCard.pLocation= "";
+		        vm.travelCard.pImg= "";
+      		});
     }
   }
 }

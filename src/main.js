@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import VueMaterial from 'vue-material';
 import VueFire from 'vuefire';
 import Vuex from 'vuex';
+import store from './store/store';
 
 Vue.use(Vuex)
 
@@ -21,5 +22,6 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
