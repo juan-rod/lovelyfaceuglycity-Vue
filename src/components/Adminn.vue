@@ -1,6 +1,6 @@
 <template>
 	<div>
-	    <form role="form" class="" @submit.prevent="addTravel">
+	    <form role="form" class="" @submit.prevent="addTravel($event)">
 	  		<div class="addnewImgDiv">
 	  			<h3>Add a photo</h3>
 	  		</div>
@@ -86,7 +86,8 @@ export default {
     removeTravel: function (key) {
       travelRef.child(key).remove();
     },
-    addTravel: function () {
+    addTravel: function (event) {
+    	console.log("event.target.file:",event.target.files);
     	var vm = this;
 	    this.createTravelCard(this.travelCard)
       		.then(function(){
