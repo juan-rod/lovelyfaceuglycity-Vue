@@ -129,9 +129,9 @@ export default {
      },
     notifyFileInput: function(event) {
         var fileTarget = event.target.files;
-        console.log("fileTarget:",fileTarget);
+        // console.log("fileTarget:",fileTarget);
         var fileName = event.target.files[0].name;
-        console.log("fileName:",fileName);
+        // console.log("fileName:",fileName);
         // update file name value
         this.file = fileName;
     }
