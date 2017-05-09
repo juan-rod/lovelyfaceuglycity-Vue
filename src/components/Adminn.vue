@@ -23,7 +23,11 @@
 				<md-input-container>
 				  <md-icon>add_a_photo</md-icon>
 				  <label>Upload Image</label>
-				  <md-file v-model="travelCard.pImg" accept="image/*" ></md-file>
+				  <md-file 
+				  	multiple 
+				  	v-model="travelCard.pImg" 
+				  	accept="image/*" >
+				  </md-file>
 				</md-input-container>
 
 	    		<md-button type="submit" class="md-raised md-primary">Add #{{ travels.length }}</md-button>
@@ -82,23 +86,25 @@ export default {
 			uploadState: null
 	    }
   },
-  mounted: function(){
-  	this.watchFileInput();
-  },
   firebase : {
     travels: travelRef.limitToLast(25)
   },
   methods: {
   	...mapActions([
-        'createTravelCard'
+        'createTravelCard',
+        'createImageFile'
       ]),
     removeTravel: function (key) {
       travelRef.child(key).remove();
     },
     addTravel: function (e) {
+    	console.log("e:", e);
+    	
     	let vm = this;
-    	let files = e.target.file;
-    	console.log("files:", files);
+    	let files =  e.target.elements[4].files;
+    	let metadata = null;
+
+    		console.log(files)
     	if(files.length === 1) {
     		this.file = files[0];
     		console.log("this.file:",this.file);
@@ -109,33 +115,32 @@ export default {
     			console.log("metadata:",metadata);
     		}
     	}
-    	
-	    this.createTravelCard(this.travelCard, this.file)
-      		.then(function(){
-		        vm.travelCard.pTitle= "";
+
+    	this.createImageFile(this.file, metadata)
+    		.then( function() {
+    			vm.createTravelCard(vm.travelCard)
+    		})
+    		.then( function() {
+    			vm.travelCard.pTitle= "";
 		        vm.travelCard.pDesc= "";
 		        vm.travelCard.pLocation= "";
 		        vm.travelCard.pImg= "";
-      		});
+    		})
+    	
+	    // this.createTravelCard(this.travelCard, this.file)
+     //  		.then(function(){
+		   //      vm.travelCard.pTitle= "";
+		   //      vm.travelCard.pDesc= "";
+		   //      vm.travelCard.pLocation= "";
+		   //      vm.travelCard.pImg= "";
+     //  		});
     },
     isValid: function(filename){
     	let index = this.authorized.indexOf(mime.lookup(filename));
+    	console.log("index:",index);
     	return index !== -1;
-    },
-    watchFileInput: function() {
-            // will notify a file input
-        $('input[type="file"]').change(this.notifyFileInput.bind(this));
-        console.log("hello from watchFileInput");
-     },
-    notifyFileInput: function(event) {
-        var fileTarget = event.target.files;
-        // console.log("fileTarget:",fileTarget);
-        var fileName = event.target.files[0].name;
-        // console.log("fileName:",fileName);
-        // update file name value
-        this.file = fileName;
     }
-    
+  
   }
 }
 </script>
