@@ -1,4 +1,4 @@
-export const createTravelCard = ({ commit }, travelCard) => {
+export const createTravelCard = ({ commit }, travelCard, file) => {
 	console.log("herro from actions")
   commit('CREATE_TRAVELCARD', travelCard);
 }

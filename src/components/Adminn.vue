@@ -1,6 +1,6 @@
 <template>
 	<div>
-	    <form role="form" class="" @submit.prevent="addTravel($event)">
+	    <form role="form" class="" @submit.prevent="addTravel">
 	  		<div class="addnewImgDiv">
 	  			<h3>Add a photo</h3>
 	  		</div>
@@ -57,8 +57,10 @@
 </template>
 <script>
 import {db} from '../firebase';
+import {storage} from '../firebase';
 import TravelCard from './TravelCard.vue';
 import { mapActions } from 'vuex';
+import mime from 'mime-types';
 
 var travelRef = db.ref('travel');
 export default {
@@ -73,8 +75,15 @@ export default {
 				pLocation: '',
 				pImg: ''
 			},
-			travels: {}
+			travels: {},
+			file : null,
+			authorized: ['image/jpeg', 'image/png'],
+			uploadTask : null,
+			uploadState: null
 	    }
+  },
+  mounted: function(){
+  	this.watchFileInput();
   },
   firebase : {
     travels: travelRef.limitToLast(25)
@@ -86,17 +95,47 @@ export default {
     removeTravel: function (key) {
       travelRef.child(key).remove();
     },
-    addTravel: function (event) {
-    	console.log("event.target.file:",event.target.files);
-    	var vm = this;
-	    this.createTravelCard(this.travelCard)
+    addTravel: function (e) {
+    	let vm = this;
+    	let files = e.target.file;
+    	console.log("files:", files);
+    	if(files.length === 1) {
+    		this.file = files[0];
+    		console.log("this.file:",this.file);
+    	}
+    	if(this.file !== null) {
+    		if(this.isValid(this.file.name)) {
+    			let metadata = {contentType: mime.lookup(this.file.name)};
+    			console.log("metadata:",metadata);
+    		}
+    	}
+    	
+	    this.createTravelCard(this.travelCard, this.file)
       		.then(function(){
 		        vm.travelCard.pTitle= "";
 		        vm.travelCard.pDesc= "";
 		        vm.travelCard.pLocation= "";
 		        vm.travelCard.pImg= "";
       		});
+    },
+    isValid: function(filename){
+    	let index = this.authorized.indexOf(mime.lookup(filename));
+    	return index !== -1;
+    },
+    watchFileInput: function() {
+            // will notify a file input
+        $('input[type="file"]').change(this.notifyFileInput.bind(this));
+        console.log("hello from watchFileInput");
+     },
+    notifyFileInput: function(event) {
+        var fileTarget = event.target.files;
+        console.log("fileTarget:",fileTarget);
+        var fileName = event.target.files[0].name;
+        console.log("fileName:",fileName);
+        // update file name value
+        this.file = fileName;
     }
+    
   }
 }
 </script>
